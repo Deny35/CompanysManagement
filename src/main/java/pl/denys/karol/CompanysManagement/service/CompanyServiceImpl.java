@@ -4,13 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import pl.denys.karol.CompanysManagement.dto.CompanyDTO;
 import pl.denys.karol.CompanysManagement.exception.CompanyNotFoundException;
 import pl.denys.karol.CompanysManagement.mapper.CompanyMapper;
 import pl.denys.karol.CompanysManagement.model.Company;
 import pl.denys.karol.CompanysManagement.repository.CompanyRepository;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,21 +47,7 @@ public class CompanyServiceImpl implements CompanyService {
         }
     }
 
-//    @Override
-//    public ResponseEntity<List<CompanyDTO>> getAllCompaniesWithoutLocation() {
-//        try {
-//            List<Object[]> results = companyRepository.findAllWithoutLocation();
-//            List<CompanyDTO> companies = results.stream()
-//                    .map(companyMapper::mapToCompanyDTO)
-//                    .toList();
-//            return ResponseEntity.ok(companies);
-//        } catch (Exception e) {
-//            throw new RuntimeException("Error fetching companies without location", e);
-//        }
-//    }
-
     @Override
-    @Transactional
     public ResponseEntity<CompanyDTO> updateCompany(Long id, CompanyDTO companyDTO) {
         Company existingCompany = companyRepository.findById(id)
                 .orElseThrow(() -> new CompanyNotFoundException("Company not found with id: " + id));
@@ -85,7 +69,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    @Transactional
     public ResponseEntity<Void> deleteCompany(Long id) {
         Company existingCompany = companyRepository.findById(id)
                 .orElseThrow(() -> new CompanyNotFoundException("Company not found with id: " + id));

@@ -1,7 +1,6 @@
 package pl.denys.karol.CompanysManagement.dto;
 
 import lombok.*;
-
 import java.time.LocalDate;
 
 @Data

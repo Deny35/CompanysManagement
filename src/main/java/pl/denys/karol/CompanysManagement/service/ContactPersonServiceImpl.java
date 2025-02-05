@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import pl.denys.karol.CompanysManagement.dto.ContactPersonDTO;
 import pl.denys.karol.CompanysManagement.exception.CompanyNotFoundException;
 import pl.denys.karol.CompanysManagement.mapper.ContactPersonMapper;

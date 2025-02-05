@@ -1,6 +1,5 @@
 package pl.denys.karol.CompanysManagement.dto;
 
-
 import lombok.*;
 
 @Data

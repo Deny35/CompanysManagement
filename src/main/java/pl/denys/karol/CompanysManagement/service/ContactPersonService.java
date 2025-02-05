@@ -2,7 +2,6 @@ package pl.denys.karol.CompanysManagement.service;
 
 import org.springframework.http.ResponseEntity;
 import pl.denys.karol.CompanysManagement.dto.ContactPersonDTO;
-
 import java.util.List;
 
 public interface ContactPersonService {

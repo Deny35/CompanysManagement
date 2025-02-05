@@ -3,8 +3,6 @@ package pl.denys.karol.CompanysManagement.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.locationtech.jts.geom.Point;
-
-
 import java.util.List;
 
 @Entity
