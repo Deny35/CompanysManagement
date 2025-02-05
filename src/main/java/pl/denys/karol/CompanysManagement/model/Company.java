@@ -8,6 +8,7 @@ import org.locationtech.jts.geom.Point;
 import java.util.List;
 
 @Entity
+@Data
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

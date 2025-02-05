@@ -10,7 +10,7 @@ public interface CompanyService {
 
     ResponseEntity<CompanyDTO> createCompany(CompanyDTO companyDTO);
 
-    ResponseEntity<List<CompanyDTO>> getAllCompaniesWithoutLocation();
+//    ResponseEntity<List<CompanyDTO>> getAllCompaniesWithoutLocation();
 
     ResponseEntity<CompanyDTO> updateCompany(Long id, CompanyDTO companyDTO);
     ResponseEntity<Void> deleteCompany(Long id);

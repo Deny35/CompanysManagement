@@ -23,10 +23,10 @@ public class CompanyController {
         return companyService.createCompany(companyDTO);
     }
 
-    @GetMapping ("/alo")
-    public ResponseEntity<List<CompanyDTO>> getAllCompaniesWithoutLocation() {
-        return companyService.getAllCompaniesWithoutLocation();
-    }
+//    @GetMapping ("/alo")
+//    public ResponseEntity<List<CompanyDTO>> getAllCompaniesWithoutLocation() {
+//        return companyService.getAllCompaniesWithoutLocation();
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<CompanyDTO> updateCompany(@PathVariable Long id, @RequestBody CompanyDTO companyDTO) {

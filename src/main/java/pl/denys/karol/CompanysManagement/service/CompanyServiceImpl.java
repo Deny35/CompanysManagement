@@ -50,18 +50,18 @@ public class CompanyServiceImpl implements CompanyService {
         }
     }
 
-    @Override
-    public ResponseEntity<List<CompanyDTO>> getAllCompaniesWithoutLocation() {
-        try {
-            List<Object[]> results = companyRepository.findAllWithoutLocation();
-            List<CompanyDTO> companies = results.stream()
-                    .map(companyMapper::mapToCompanyDTO)
-                    .toList();
-            return ResponseEntity.ok(companies);
-        } catch (Exception e) {
-            throw new RuntimeException("Error fetching companies without location", e);
-        }
-    }
+//    @Override
+//    public ResponseEntity<List<CompanyDTO>> getAllCompaniesWithoutLocation() {
+//        try {
+//            List<Object[]> results = companyRepository.findAllWithoutLocation();
+//            List<CompanyDTO> companies = results.stream()
+//                    .map(companyMapper::mapToCompanyDTO)
+//                    .toList();
+//            return ResponseEntity.ok(companies);
+//        } catch (Exception e) {
+//            throw new RuntimeException("Error fetching companies without location", e);
+//        }
+//    }
 
     @Override
     @Transactional

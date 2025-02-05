@@ -6,11 +6,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Data
 public class Meeting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

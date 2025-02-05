@@ -18,7 +18,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Query(value = "UPDATE company SET location = ST_SetSRID(ST_MakePoint(:longitude, :latitude), 4326), latitude = :latitude, longitude = :longitude WHERE id = :id", nativeQuery = true)
     void updateLocation(@Param("id") Long id, @Param("latitude") double latitude, @Param("longitude") double longitude);
 
-    @Query(value = "SELECT id, name, address, city, latitude, longitude FROM company", nativeQuery = true)
-    List<Object[]> findAllWithoutLocation();
+//    @Query(value = "SELECT id, name, address, city, latitude, longitude FROM company", nativeQuery = true)
+//    List<Object[]> findAllWithoutLocation();
 
 }

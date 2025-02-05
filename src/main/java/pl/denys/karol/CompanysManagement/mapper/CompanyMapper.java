@@ -18,21 +18,21 @@ public interface CompanyMapper {
 
     Company toEntity(CompanyDTO companyDto);
 
-    // Mapowanie z Object[] do CompanyDTO - domyślna implementacja
-    default CompanyDTO mapToCompanyDTO(Object[] row) {
-        if (row == null || row.length < 6) {
-            throw new IllegalArgumentException("Invalid data structure for mapping to CompanyDTO");
-        }
 
-        CompanyDTO dto = new CompanyDTO();
-        dto.setId(((Number) row[0]).longValue()); // Rzutowanie na Long
-        dto.setName((String) row[1]);
-        dto.setAddress((String) row[2]);
-        dto.setCity((String) row[3]);
-        dto.setLatitude((Double) row[4]);
-        dto.setLongitude((Double) row[5]);
-
-        return dto;
-    }
+//    default CompanyDTO mapToCompanyDTO(Object[] row) {
+//        if (row == null || row.length < 6) {
+//            throw new IllegalArgumentException("Invalid data structure for mapping to CompanyDTO");
+//        }
+//
+//        CompanyDTO dto = new CompanyDTO();
+//        dto.setId(((Number) row[0]).longValue());
+//        dto.setName((String) row[1]);
+//        dto.setAddress((String) row[2]);
+//        dto.setCity((String) row[3]);
+//        dto.setLatitude((Double) row[4]);
+//        dto.setLongitude((Double) row[5]);
+//
+//        return dto;
+//    }
 
 }
