@@ -4,8 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import jakarta.transaction.Transactional;
+import pl.denys.karol.CompanysManagement.dto.CompanyBasicDTO;
+import pl.denys.karol.CompanysManagement.dto.CompanyBasicToAddDTO;
 import pl.denys.karol.CompanysManagement.dto.CompanyDTO;
 import pl.denys.karol.CompanysManagement.exception.CompanyNotFoundException;
+import pl.denys.karol.CompanysManagement.mapper.CompanyBasicMapper;
+import pl.denys.karol.CompanysManagement.mapper.CompanyBasicToAddMapper;
 import pl.denys.karol.CompanysManagement.mapper.CompanyMapper;
 import pl.denys.karol.CompanysManagement.model.Company;
 import pl.denys.karol.CompanysManagement.repository.CompanyRepository;
@@ -20,13 +26,17 @@ public class CompanyServiceImpl implements CompanyService {
     private GeocodingService geocodingService;
     @Autowired
     private CompanyMapper companyMapper;
+    @Autowired
+    private CompanyBasicMapper companyBasicMapper;
+    @Autowired
+    private CompanyBasicToAddMapper companyBasicToAddMapper;
 
     @Override
-    public ResponseEntity<List<CompanyDTO>> getAllCompanies() {
+    public ResponseEntity<List<CompanyBasicDTO>> getAllCompanies() {
         try {
-            List<CompanyDTO> companies = companyRepository.findAll()
+            List<CompanyBasicDTO> companies = companyRepository.findAll()
                     .stream()
-                    .map(companyMapper::toDTO)
+                    .map(companyBasicMapper::toDTO)
                     .collect(Collectors.toList());
             return ResponseEntity.ok(companies);
         } catch (Exception e) {
@@ -35,13 +45,23 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public ResponseEntity<CompanyDTO> createCompany(CompanyDTO companyDTO) {
+    public ResponseEntity<CompanyDTO> getCompanyWithDetails(Long id) {
+        Company company = companyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Company not found with id: " + id));
+
+        CompanyDTO companyDTO = companyMapper.toDTO(company);
+        return ResponseEntity.status(HttpStatus.OK).body(companyDTO);
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<CompanyBasicToAddDTO> createCompany(CompanyBasicToAddDTO companyBasicToAddDTO) {
         try {
-            Company company = companyMapper.toEntity(companyDTO);
+            Company company = companyBasicToAddMapper.toEntity(companyBasicToAddDTO);
             Company savedCompany = companyRepository.save(company);
-            double[] coordinates = geocodingService.getCoordinates(companyDTO.getAddress(), companyDTO.getCity(), companyDTO.getZipCode());
+            double[] coordinates = geocodingService.getCoordinates(companyBasicToAddDTO.getAddress(), companyBasicToAddDTO.getCity(), companyBasicToAddDTO.getZipCode());
             companyRepository.updateLocation(company.getId(), coordinates[0], coordinates[1]);
-            return ResponseEntity.status(HttpStatus.CREATED).body(companyMapper.toDTO(savedCompany));
+            return ResponseEntity.status(HttpStatus.CREATED).body(companyBasicToAddMapper.toDTO(savedCompany));
         } catch (Exception e) {
             throw new RuntimeException("Error creating company", e);
         }

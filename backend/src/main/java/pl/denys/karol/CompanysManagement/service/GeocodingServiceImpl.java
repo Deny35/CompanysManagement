@@ -21,7 +21,6 @@ public class GeocodingServiceImpl implements GeocodingService {
             throw new IllegalStateException("Google Maps API key is missing!");
         }
 
-        // Wykonanie testowego zapytania do Google API, aby sprawdzić, czy klucz jest ważny
         String testUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=Test&key=" + apiKey;
         Map<String, Object> response = restTemplate.getForObject(testUrl, Map.class);
 
@@ -34,7 +33,8 @@ public class GeocodingServiceImpl implements GeocodingService {
 
     @Override
     public double[] getCoordinates(String address, String city, String zipCode) {
-        // Przekształć dane wejściowe na odpowiedni format
+
+
         String formattedAddress = address.replace(" ", "+");
         String formattedCity = city.replace(" ", "+");
         String formattedZipCode = zipCode.replace(" ", "+");
@@ -42,7 +42,6 @@ public class GeocodingServiceImpl implements GeocodingService {
         String fullAddress = formattedAddress + "," + formattedCity + "," + formattedZipCode;
         String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + fullAddress + "&key=" + apiKey;
 
-        // Próbuj uzyskać odpowiedź z API
         Map<String, Object> response = restTemplate.getForObject(url, Map.class);
 
         if (response != null && "OK".equals(response.get("status"))) {
@@ -50,10 +49,8 @@ public class GeocodingServiceImpl implements GeocodingService {
             if (!results.isEmpty()) {
                 Map<String, Object> location = (Map<String, Object>) results.get(0).get("geometry");
                 Map<String, Object> coordinates = (Map<String, Object>) location.get("location");
-
                 double latitude = (double) coordinates.get("lat");
                 double longitude = (double) coordinates.get("lng");
-
                 return new double[]{latitude, longitude};
             }
         }
