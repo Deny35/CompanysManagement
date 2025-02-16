@@ -1,8 +1,10 @@
 package pl.denys.karol.CompanysManagement.dto;
 
+import java.util.List;
 import lombok.*;
 
 @Data
+@AllArgsConstructor
 public class CompanyDTO {
 
     private Long id;
@@ -13,4 +15,6 @@ public class CompanyDTO {
     private Double latitude;
     private Double longitude;
 
+    private List<ContactPersonDTO> contactPersons;
+    private List<MeetingDTO> meetings;
 }

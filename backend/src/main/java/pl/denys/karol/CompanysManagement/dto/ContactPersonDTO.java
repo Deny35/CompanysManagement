@@ -3,6 +3,7 @@ package pl.denys.karol.CompanysManagement.dto;
 import lombok.*;
 
 @Data
+@AllArgsConstructor
 public class ContactPersonDTO {
     private Long id;
     private String firstName;
@@ -11,5 +12,5 @@ public class ContactPersonDTO {
     private String phone;
     private String position;
     private Long companyId;
-    
+
 }
