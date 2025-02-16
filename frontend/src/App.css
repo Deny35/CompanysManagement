@@ -62,3 +62,8 @@ html, body {
   align-items: flex-start;
   padding: 20px;
 }
+.leaflet-container {
+  height: 100vh; /* lub inna wysokość */
+  width: 100%;
+}
+

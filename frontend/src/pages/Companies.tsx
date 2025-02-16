@@ -1,49 +1,66 @@
-import { useEffect, useState } from "react";
-import { Table, Container, Button } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Container, Table, Form, Button } from "react-bootstrap";
 
 interface Company {
   id: number;
   name: string;
   city: string;
+  latitude: number;
+  longitude: number;
+  lastMeetingDate?: string | null;
 }
 
-const Companies = () => {
+const Companies: React.FC = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
+  const [dateFilter, setDateFilter] = useState<string>("");
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/companies")
-      .then(response => {
-        console.log("Fetched companies:", response.data); // Wyświetlanie listy w konsoli
-        setCompanies(response.data);
-      })
-      .catch(error => console.error("Error fetching companies:", error));
+    fetchCompanies();
   }, []);
 
+  const fetchCompanies = async (date?: string) => {
+    try {
+      const url = date ? `http://localhost:8080/api/companies/filter?startDate=${date}` : "http://localhost:8080/api/companies";
+      const response = await axios.get<Company[]>(url);
+      setCompanies(response.data);
+    } catch (error) {
+      console.error("Error fetching companies:", error);
+    }
+  };
+
   return (
-    <Container fluid className="mt-5">
-      <h2 className="text-center mb-4">Company List</h2>
-      <Table striped bordered hover responsive className="bg-dark text-white">
-        <thead className="table-primary">
+    <Container>
+      <h2 className="mt-4">Companies List</h2>
+
+      <Form className="mb-3">
+        <Form.Group controlId="dateFilter">
+          <Form.Label>Filter by Last Meeting Date:</Form.Label>
+          <Form.Control
+            type="date"
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+          />
+        </Form.Group>
+        <Button className="mt-2" variant="primary" onClick={() => fetchCompanies(dateFilter)}>
+          Filter
+        </Button>
+      </Form>
+
+      <Table striped bordered hover>
+        <thead>
           <tr>
-            <th>ID</th>
             <th>Name</th>
             <th>City</th>
-            <th>Actions</th>
+            <th>Last Meeting</th>
           </tr>
         </thead>
         <tbody>
-          {companies.map(company => (
+          {companies.map((company) => (
             <tr key={company.id}>
-              <td>{company.id}</td>
               <td>{company.name}</td>
               <td>{company.city}</td>
-              <td>
-                <Link to={`/companies/${company.id}`}>
-                  <Button variant="light" size="sm">View</Button>
-                </Link>
-              </td>
+              <td>{company.lastMeetingDate ?? "No meetings"}</td>
             </tr>
           ))}
         </tbody>

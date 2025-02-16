@@ -10,13 +10,13 @@ import pl.denys.karol.CompanysManagement.dto.CompanyBasicDTO;
 import pl.denys.karol.CompanysManagement.dto.CompanyBasicToAddDTO;
 import pl.denys.karol.CompanysManagement.dto.CompanyDTO;
 import pl.denys.karol.CompanysManagement.exception.CompanyNotFoundException;
-import pl.denys.karol.CompanysManagement.mapper.CompanyBasicMapper;
 import pl.denys.karol.CompanysManagement.mapper.CompanyBasicToAddMapper;
 import pl.denys.karol.CompanysManagement.mapper.CompanyMapper;
 import pl.denys.karol.CompanysManagement.model.Company;
 import pl.denys.karol.CompanysManagement.repository.CompanyRepository;
+
+import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -27,20 +27,49 @@ public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private CompanyMapper companyMapper;
     @Autowired
-    private CompanyBasicMapper companyBasicMapper;
-    @Autowired
     private CompanyBasicToAddMapper companyBasicToAddMapper;
 
     @Override
     public ResponseEntity<List<CompanyBasicDTO>> getAllCompanies() {
         try {
-            List<CompanyBasicDTO> companies = companyRepository.findAll()
-                    .stream()
-                    .map(companyBasicMapper::toDTO)
-                    .collect(Collectors.toList());
+            List<Object[]> results = companyRepository.findAllWithLastMeeting();
+            
+            List<CompanyBasicDTO> companies = results.stream().map(row -> {
+                System.out.println("Raw date value: " + row[5]); // Debug - sprawdzanie wartości przed konwersją
+
+                return new CompanyBasicDTO(
+                    ((Number) row[0]).longValue(),
+                    (String) row[1],
+                    (String) row[2],
+                    ((Number) row[3]).doubleValue(),
+                    ((Number) row[4]).doubleValue(), 
+                    row[5] != null ? ((java.sql.Date) row[5]).toLocalDate() : null
+                );
+            }).toList();
+            
             return ResponseEntity.ok(companies);
         } catch (Exception e) {
-            throw new RuntimeException("Error fetching all companies", e);
+            throw new RuntimeException("Error fetching all companiesss", e);
+        }
+    }
+
+    @Override
+    public ResponseEntity<List<CompanyBasicDTO>> getAllCompaniesAfterDate(LocalDate startDate) {
+        try {
+            List<Object[]> results = companyRepository.findCompaniesWithLastMeetingAfter(startDate);
+
+            List<CompanyBasicDTO> companies = results.stream().map(row -> new CompanyBasicDTO(
+                    ((Number) row[0]).longValue(),
+                    (String) row[1],
+                    (String) row[2],
+                    ((Number) row[3]).doubleValue(),
+                    ((Number) row[4]).doubleValue(),
+                    row[5] != null ? ((java.sql.Date) row[5]).toLocalDate() : null
+            )).toList();
+
+            return ResponseEntity.ok(companies);
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching companies after date", e);
         }
     }
 
